@@ -36,4 +36,12 @@ public interface EmployeeMapper {
     * @Date 2024/9/11 02:04
     */
     Page<Employee> pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
+
+    /**
+    * 根据主键动态修改属性
+    * @param employee
+    * @return
+    * @Date 2024/9/11 02:49
+    */
+    void update(Employee employee);
 }
