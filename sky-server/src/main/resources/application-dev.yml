@@ -6,3 +6,14 @@ sky:
     database: sky_take_out
     username: root
     password: XBf20042611.
+  alioss:
+    endpoint: aaa
+    access-key-id: aaa
+    access-key-secret: aaa
+    bucket-name: aaa
+  qiniuoss:
+    access-key-id: cmPP4jJxRzUmByXrzgIY7ONUHlyT-FmCQk_rcy6N
+    access-key-secret: Y7pcp3zj77yIP60DC7xai3bxYtnezLbi00TyxTXG
+    bucket-name: myimage-bad
+    image-url: https://qnimg.xblog1.top
+    path: sky

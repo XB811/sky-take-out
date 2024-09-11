@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-    * @Description  捕获违反了数据库的唯一约束条件的异常，也就是username已存在的异常
+    * @Description  捕获违反了数据库的唯一约束条件的异常，也就是xxx已存在的异常
     * @param ex
     * @return com.sky.result.Result
     * @Date 2024/9/11

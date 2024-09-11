@@ -30,6 +30,8 @@
         <jjwt>0.9.1</jjwt>
         <jaxb-api>2.3.1</jaxb-api>
         <poi>3.16</poi>
+        <wechatpay-apiv3>0.4.8</wechatpay-apiv3>
+        <qiniu-java-sdk>7.2.28</qiniu-java-sdk>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -120,7 +122,13 @@
             <dependency>
                 <groupId>com.github.wechatpay-apiv3</groupId>
                 <artifactId>wechatpay-apache-httpclient</artifactId>
-                <version>0.4.8</version>
+                <version>${wechatpay-apiv3}</version>
+            </dependency>
+            <!--qiniu依赖-->
+            <dependency>
+                <groupId>com.qiniu</groupId>
+                <artifactId>qiniu-java-sdk</artifactId>
+                <version>${qiniu-java-sdk}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
