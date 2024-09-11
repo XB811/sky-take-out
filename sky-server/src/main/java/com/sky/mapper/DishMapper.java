@@ -65,4 +65,13 @@ public interface DishMapper {
     * @Date 2024/9/11 20:52
     */
     void deleteByIdBatch(List<Long> ids);
+
+    /**
+    * 修改菜品
+    * @param dish
+    * @return
+    * @Date 2024/9/11 22:19
+    */
+    @AutoFill(value = OperationType.UPDATE)
+    void update(Dish dish);
 }

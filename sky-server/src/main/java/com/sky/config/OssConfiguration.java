@@ -31,7 +31,7 @@ public class OssConfiguration {
                 .accessKeyId(qiNiuOssProperties.getAccessKeyId())
                 .accessKeySecret(qiNiuOssProperties.getAccessKeySecret())
                 .imageUrl(qiNiuOssProperties.getImageUrl())
-                .imageUrl(qiNiuOssProperties.getImageUrl())
+                .path(qiNiuOssProperties.getPath())
                 .bucketName(qiNiuOssProperties.getBucketName())
                 .build();
         return qiNiuOSSUtil;

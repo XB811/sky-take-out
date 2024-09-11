@@ -11,7 +11,6 @@ import com.sky.entity.DishFlavor;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
-import com.sky.mapper.EmployeeMapper;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
@@ -116,5 +115,63 @@ public class DishServiceImpl implements DishService {
         dishMapper.deleteByIdBatch(ids);
         //批量删除口味数据
         dishFlavorMapper.deleteByDishIdBatch(ids);
+    }
+
+    /**
+    * 根据id查询菜品
+    * @param id 
+    * @return DishVO 
+    * @Date 2024/9/11 21:45
+    */
+    @Override
+    public DishVO getById(Long id) {
+        Dish dish = dishMapper.getById(id);
+        List<DishFlavor> dishFlavors= dishFlavorMapper.getByDishId(id);
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish,dishVO);
+        dishVO.setFlavors(dishFlavors);
+        return dishVO;
+    }
+
+    /**
+    * 修改菜品
+    * @param dishDTO
+    * @return
+    * @Date 2024/9/11 21:46
+    */
+    @Override
+    public void updateWithFlavor(DishDTO dishDTO) {
+        //更新菜品信息
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO, dish);
+        dishMapper.update(dish);
+        //删除原来的菜品口味
+        dishFlavorMapper.deleteByDishId(dish.getId());
+        //添加新的菜品口味
+        List<DishFlavor> flavors = dishDTO.getFlavors();
+        if(flavors != null && !flavors.isEmpty()) {
+            //批量插入dishId
+            flavors.forEach(dishFlavor -> {
+                dishFlavor.setDishId(dish.getId());
+            });
+            //插入数条口味信息
+            dishFlavorMapper.insertBatch(flavors);
+        }
+    }
+
+    /**
+    * 菜品起售、停售
+    * @param status 
+     * @param id 
+    * @return 
+    * @Date 2024/9/11 23:32
+    */
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        Dish dish = Dish.builder()
+                .status(status)
+                .id(id)
+                .build();
+        dishMapper.update(dish);
     }
 }
