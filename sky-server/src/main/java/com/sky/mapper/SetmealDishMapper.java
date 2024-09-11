@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 import com.sky.entity.Dish;
+import com.sky.entity.SetmealDish;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -22,4 +23,12 @@ public interface SetmealDishMapper {
     */
 
     List<Long> getSetmealDishByDishIds(List<Long> dishIds);
+
+    /**
+    * 批量插入菜品数据
+    * @param dishes
+    * @return
+    * @Date 2024/9/12 01:35
+    */
+    void insertBatch(List<SetmealDish> dishes);
 }

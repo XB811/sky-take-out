@@ -174,4 +174,11 @@ public class DishServiceImpl implements DishService {
                 .build();
         dishMapper.update(dish);
     }
+
+    @Override
+    public List<DishVO> getByCategoryId(Integer categoryId) {
+        List<DishVO> dishVOList=dishMapper.getByCategoryId(categoryId);
+        return dishVOList;
+    }
+
 }
