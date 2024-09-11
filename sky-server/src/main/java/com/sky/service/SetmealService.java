@@ -1,6 +1,8 @@
 package com.sky.service;
 
 import com.sky.dto.SetmealDTO;
+import com.sky.dto.SetmealPageQueryDTO;
+import com.sky.result.PageResult;
 
 /**
  * @FileName SetmealService
@@ -17,4 +19,12 @@ public interface SetmealService {
     * @Date 2024/9/12 01:00
     */
     void saveWithDish(SetmealDTO setmealDTO);
+
+    /**
+    * 套餐分页查询
+    * @param setmealPageQueryDTO
+    * @return PageResult
+    * @Date 2024/9/12 01:45
+    */
+    PageResult pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 }

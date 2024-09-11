@@ -8,4 +8,20 @@
         values
         (#{categoryId},#{name},#{price},#{status},#{description},#{image},#{createTime},#{updateTime},#{createUser},#{updateUser})
     </insert>
+<!--    将套餐表和分类表左连接，选择完成后同时输出-->
+    <select id="pageQuery" resultType="com.sky.vo.SetmealVO">
+        select s.*,c.name as categoryName from setmeal s left outer join category c on s.category_id = c.id
+        <where>
+            <if test="name != null and name !=''">
+                and s.name like concat('%',#{name},'%')#套餐名筛选
+            </if>
+            <if test="categoryId !=null">
+                and s.category_id =#{categoryId}# 分类筛选
+            </if>
+            <if test="status != null ">
+                and s.status = #{status}# 状态筛选
+            </if>
+        </where>
+        order by create_time desc
+    </select>
 </mapper>
