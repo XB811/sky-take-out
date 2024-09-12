@@ -1,3 +1,4 @@
+```
 sky-take-out
 ├─ pom.xml
 ├─ README.md
@@ -8,13 +9,7 @@ sky-take-out
 │        ├─ resources
 │        │  ├─ application-dev.yml
 │        │  ├─ application.yml
-│        │  └─ mapper 
-│        │     ├─ CategoryMapper.xml
-│        │     ├─ DishFlavorMapper.xml
-│        │     ├─ DishMapper.xml
-│        │     ├─ EmployeeMapper.xml
-│        │     ├─ SetmealDishMapper.xml
-│        │     └─ SetmealMapper.xml
+│        │  └─ mapper
 │        └─ java
 │           └─ com
 │              └─ sky
@@ -53,3 +48,4 @@ sky-take-out
                   ├─ enumeration
                   ├─ context
                   └─ constant
+```
