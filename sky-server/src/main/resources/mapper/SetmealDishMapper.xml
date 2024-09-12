@@ -8,6 +8,10 @@
             (#{sd.setmealId},#{sd.dishId},#{sd.name},#{sd.price},#{sd.copies})
         </foreach>
     </insert>
+    <delete id="deleteBySetmealIdBatch">
+        delete from setmeal_dish where dish_id in
+            <foreach collection="setmealIds" open="(" close=")" item="setmealId" separator=",">#{setmealId}</foreach>
+    </delete>
     <select id="getSetmealDishByDishIds" resultType="java.lang.Long">
         select setmeal_id from setmeal_dish
         <where>

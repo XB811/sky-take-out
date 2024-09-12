@@ -8,7 +8,27 @@
         values
         (#{categoryId},#{name},#{price},#{status},#{description},#{image},#{createTime},#{updateTime},#{createUser},#{updateUser})
     </insert>
-<!--    将套餐表和分类表左连接，选择完成后同时输出-->
+    <update id="update">
+        update setmeal
+        <set>
+            <if test="name != null and name != '' ">name = #{name},</if>
+            <if test="categoryId != null ">category_id = #{categoryId},</if>
+            <if test="price != null ">price = #{price},</if>
+            <if test="image != null and image != '' ">image = #{image},</if>
+            <if test="description != null and description != '' ">description = #{description},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+            <if test="updateUser != null  ">update_user = #{updateUser},</if>
+
+        </set>
+    </update>
+    <delete id="deleteByIdBatch">
+        delete from setmeal
+        <where>
+            id in <foreach collection="ids" open="(" close=")" separator="," item="id">#{id}</foreach>
+        </where>
+    </delete>
+    <!--    将套餐表和分类表左连接，选择完成后同时输出-->
     <select id="pageQuery" resultType="com.sky.vo.SetmealVO">
         select s.*,c.name as categoryName from setmeal s left outer join category c on s.category_id = c.id
         <where>
