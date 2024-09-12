@@ -13,6 +13,7 @@ import com.sky.dto.PasswordEditDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
+import com.sky.exception.PasswordEditFailedException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.result.PageResult;
@@ -167,12 +168,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee=employeeMapper.getById(id);
         String oldPassword=passwordEditDTO.getOldPassword();
         String newPassword=passwordEditDTO.getNewPassword();
+        if(employee == null){
+            throw new AccountNotFoundException(MessageConstant.ACCOUNT_NOT_FOUND);
+        }
+        if(oldPassword==null||newPassword==null)
+            throw new PasswordEditFailedException(MessageConstant.PASSWORD_EDIT_FAILED);
         //密码比对
         // 进行md5加密，然后再进行比对
         oldPassword= DigestUtils.md5DigestAsHex(oldPassword.getBytes());
         if (!oldPassword.equals(employee.getPassword())) {
             //密码错误
-            throw new PasswordErrorException(MessageConstant.PASSWORD_EDIT_FAILED);
+            throw new PasswordEditFailedException(MessageConstant.PASSWORD_EDIT_FAILED);
         }
         employee.setPassword(DigestUtils.md5DigestAsHex(newPassword.getBytes()));
         employeeMapper.update(employee);

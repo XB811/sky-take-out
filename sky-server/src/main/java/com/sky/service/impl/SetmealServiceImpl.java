@@ -6,9 +6,12 @@ import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import com.sky.exception.DeletionNotAllowedException;
+import com.sky.exception.SetmealEnableFailedException;
+import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
@@ -34,6 +37,8 @@ public class SetmealServiceImpl implements SetmealService {
     private SetmealMapper setmealMapper;
     @Autowired
     private SetmealDishMapper setmealDishMapper;
+    @Autowired
+    private DishMapper dishMapper;
 
     /**
     * 新增套餐
@@ -108,7 +113,7 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     public SetmealVO getById(Long id) {
         Setmeal setmeal = setmealMapper.getById(id);
-        List<SetmealDish> setmealDishes =setmealDishMapper.getByDishId(id);
+        List<SetmealDish> setmealDishes =setmealDishMapper.getBySetmealId(id);
         SetmealVO setmealVO = new SetmealVO();
         BeanUtils.copyProperties(setmeal,setmealVO);
         setmealVO.setSetmealDishes(setmealDishes);
@@ -133,5 +138,26 @@ public class SetmealServiceImpl implements SetmealService {
             //批量插入菜品
             setmealDishMapper.insertBatch(dishes);
         }
+    }
+
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        //如果status为1，判读当前套餐下是否有菜品的status为0
+        if(status == StatusConstant.ENABLE){
+            //获取套餐id包含的菜品id
+            List<SetmealDish> dishes=setmealDishMapper.getBySetmealId(id);
+            if(dishes !=null && !dishes.isEmpty()){
+                for(SetmealDish setmealDish : dishes){
+                    Dish dish=dishMapper.getById(setmealDish.getDishId());
+                    if(dish.getStatus()==StatusConstant.DISABLE)
+                        throw new SetmealEnableFailedException(MessageConstant.SETMEAL_ENABLE_FAILED);
+                }
+            }
+        }
+        Setmeal setmeal = Setmeal.builder()
+                .status(status)
+                .id(id)
+                .build();
+        setmealMapper.update(setmeal);
     }
 }

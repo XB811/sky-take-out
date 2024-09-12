@@ -54,4 +54,13 @@ public interface SetmealService {
     * @Date 2024/9/12 12:01
     */
     void updateWithDish(SetmealDTO setmealDTO);
+
+    /**
+    * 套餐启售、停售
+    * @param status
+     * @param id
+    * @return
+    * @Date 2024/9/12 12:43
+    */
+    void startOrStop(Integer status, Long id);
 }
