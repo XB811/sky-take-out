@@ -27,4 +27,8 @@ public interface ShoppingCartService {
     * @Date 2024/9/14 02:16
     */
     List<ShoppingCart> showShoppingCart();
+
+    void cleanShoppingCart();
+
+    void delete(ShoppingCartDTO shoppingCartDTO);
 }

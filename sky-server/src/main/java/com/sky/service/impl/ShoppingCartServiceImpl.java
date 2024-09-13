@@ -66,8 +66,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             }
             shoppingCart.setNumber(1);
             shoppingCart.setCreateTime(LocalDateTime.now());
+            shoppingCartMapper.insert(shoppingCart);
         }
-        shoppingCartMapper.insert(shoppingCart);
+
     }
 
     @Override
@@ -77,5 +78,30 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .userId(userId).build();
         List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
         return list;
+    }
+
+    @Override
+    public void cleanShoppingCart() {
+        Long userId =BaseContext.getCurrentId();
+        shoppingCartMapper.deleteByUserId(userId);
+    }
+
+    @Override
+    public void delete(ShoppingCartDTO shoppingCartDTO) {
+        Long userId =BaseContext.getCurrentId();
+        //查询购物车内的商品
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setUserId(userId);
+        BeanUtils.copyProperties(shoppingCartDTO, shoppingCart);
+        List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
+        ShoppingCart cart = list.get(0);
+        if(cart != null) {
+            if(cart.getNumber()>1) {
+                cart.setNumber(cart.getNumber() - 1);
+                shoppingCartMapper.update(cart);
+            }else{
+                shoppingCartMapper.deleteById(cart);
+            }
+        }
     }
 }
