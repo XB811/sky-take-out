@@ -10,6 +10,7 @@ import com.sky.mapper.UserMapper;
 import com.sky.properties.WeChatProperties;
 import com.sky.service.UserService;
 import com.sky.utils.HttpClientUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ import java.util.Map;
  * @date 2024-09-13
  **/
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired
