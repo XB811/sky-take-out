@@ -1,14 +1,17 @@
 package com.sky.mapper;
 
 import com.github.pagehelper.Page;
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
+import com.sky.vo.SalesTop10ReportVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @FileName OrderMapper
@@ -68,4 +71,24 @@ public interface OrderMapper {
     */
     @Select("select * from orders where status =#{status} and order_time < #{orderTime} ")
     List<Orders> getByStatusAndOrderTimeLT(Integer status, LocalDateTime orderTime);
+
+    /**
+    * 根据条件动态查找数据
+    * @param map
+    * @return 
+    * @Date 2024/9/15 00:59
+    */
+
+    Double sumByMap(Map map);
+
+    Integer countByMap(Map map);
+
+    /**
+    * 统计一定时间内的销量前10
+    * @param begin
+     * @param end
+    * @return List<SalesTop10ReportVO>
+    * @Date 2024/9/15 02:09
+    */
+    List<GoodsSalesDTO> getSalesTop10(LocalDateTime begin, LocalDateTime end);
 }

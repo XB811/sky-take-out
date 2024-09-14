@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.Map;
+
 /**
  * @FileName UserMapper
  * @Description
@@ -32,10 +34,12 @@ public interface UserMapper {
 
     /**
     * 根据id查询用户
-    * @param userId 
+    * @param id
     * @return User 
     * @Date 2024/9/14 14:56
     */
     @Select("select * from user where id = #{id}")
     User getById(Long id);
+
+    Integer sumByMap(Map map);
 }
