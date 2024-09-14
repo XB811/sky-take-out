@@ -5,18 +5,22 @@ import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
-import com.sky.vo.OrderReportVO;
-import com.sky.vo.SalesTop10ReportVO;
-import com.sky.vo.TurnoverReportVO;
-import com.sky.vo.UserReportVO;
-import io.swagger.models.auth.In;
+import com.sky.service.WorkspaceService;
+import com.sky.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.util.StringUtil;
+import org.apache.poi.xssf.usermodel.XSSFAnchor;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -38,6 +42,8 @@ public class ReportServiceImpl implements ReportService {
     OrderMapper orderMapper;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    WorkspaceService workspaceService;
 
     @Override
     public TurnoverReportVO getTurnoverStatistics(LocalDate begin, LocalDate end) {
@@ -95,7 +101,7 @@ public class ReportServiceImpl implements ReportService {
             Map map =new HashMap<>();
             map.put("begin",beginTime);
             map.put("end",endTime);
-            Integer number =userMapper.sumByMap(map);
+            Integer number =userMapper.countByMap(map);
             newUserList.add(number);
             total+=number;
             totalUserList.add(total);
@@ -169,5 +175,68 @@ public class ReportServiceImpl implements ReportService {
                 .nameList(StringUtils.join(nameList,','))
                 .numberList(StringUtils.join(numberList,','))
                 .build();
+    }
+
+    /**
+    * 导出Excel报表接口
+    * @param response 
+    * @return 
+    * @Date 2024/9/15 03:31
+    */
+    @Override
+    public void exportBusinessData(HttpServletResponse response) {
+        //1、查询数据库，获取营业数据--查询最近30天的数据
+        LocalDate dateBegin = LocalDate.now().minusDays(30);
+        LocalDate dateEnd = LocalDate.now().minusDays(1);
+        BusinessDataVO businessData = workspaceService.getBusinessData(
+                LocalDateTime.of(dateBegin, LocalTime.MIN),
+                LocalDateTime.of(dateEnd, LocalTime.MAX));
+
+        //2、通过poi将数据写入excel文件中
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream("template/运营数据报表模板.xlsx");//获得项目下的resources资源文件
+        try {
+            XSSFWorkbook excel = new XSSFWorkbook(in);
+            //获取表格标签页
+            XSSFSheet sheet = excel.getSheet("Sheet1");
+            //填充时间
+            sheet.getRow(1).getCell(1).setCellValue("时间："+dateBegin+"至"+dateEnd);
+            XSSFRow row = sheet.getRow(3);
+            row.getCell(2).setCellValue(businessData.getTurnover());
+            row.getCell(4).setCellValue(businessData.getOrderCompletionRate());
+            row.getCell(6).setCellValue(businessData.getNewUsers());
+            row = sheet.getRow(4);
+            row.getCell(2).setCellValue(businessData.getValidOrderCount());
+            row.getCell(4).setCellValue(businessData.getUnitPrice());
+            //写入每日详细信息
+            for(int i=0;i<30;i++){
+                row = sheet.getRow(7+i);
+                LocalDate today = dateBegin.plusDays(i);
+                BusinessDataVO businessData1 = workspaceService.getBusinessData(
+                                                LocalDateTime.of(today, LocalTime.MIN),
+                                                LocalDateTime.of(today, LocalTime.MAX));
+                double turnover = businessData.getTurnover() == null ? 0 : businessData1.getTurnover();
+                int validOrderCount = businessData1.getValidOrderCount() == null ? 0 : businessData1.getValidOrderCount();
+                double orderCompletionRate = businessData1.getOrderCompletionRate() == null ? 0 : businessData1.getOrderCompletionRate();
+                double unitPrice = businessData1.getUnitPrice() == null ? 0 : businessData1.getUnitPrice();
+                int newUsers = businessData1.getNewUsers() == null ? 0 : businessData1.getNewUsers();
+                row.getCell(1).setCellValue(today.toString());
+                row.getCell(2).setCellValue(turnover);
+                row.getCell(3).setCellValue(validOrderCount);
+                row.getCell(4).setCellValue(orderCompletionRate);
+                row.getCell(5).setCellValue(unitPrice);
+                row.getCell(6).setCellValue(newUsers);
+
+            }
+
+            //3、通过输出流，将文件传回客户端
+            ServletOutputStream out = response.getOutputStream();
+            excel.write(out);
+            out.close();
+            excel.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

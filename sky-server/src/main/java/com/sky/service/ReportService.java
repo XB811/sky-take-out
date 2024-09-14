@@ -5,6 +5,7 @@ import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 
 /**
@@ -36,4 +37,12 @@ public interface ReportService {
     * @Date 2024/9/15 01:57
     */
     SalesTop10ReportVO getSalesTop10(LocalDate begin, LocalDate end);
+
+    /**
+    * 导出Excel报表接口
+    * @param response
+    * @return
+    * @Date 2024/9/15 03:31
+    */
+    void exportBusinessData(HttpServletResponse response);
 }
