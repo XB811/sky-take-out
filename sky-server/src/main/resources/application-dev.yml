@@ -25,3 +25,10 @@ sky:
   wechat:
     appid: wxa49690d583fb6626
     secret: 4b616e4f4b82d5d810385a3c8d8e007a
+    mchid: 1561414331
+    mchSerialNo: 4B3B3DC35414AD50B1B755BAF8DE9CC7CF407606
+    privateKeyFilePath: E:\1、黑马程序员Java项目《苍穹外卖》企业级开发实战\资料\day08\apiclient_key.pem
+    apiV3Key: CZBK51236435wxpay435434323FFDuv3
+    weChatPayCertFilePath: E:\1、黑马程序员Java项目《苍穹外卖》企业级开发实战\资料\day08\wechatpay_166D96F876F45C7D07CE98952A96EC980368ACFC.pem
+    notifyUrl:   https://6a2ac5ee.r23.cpolar.top/notify/paySuccess
+    refundNotifyUrl:   https://6a2ac5ee.r23.cpolar.top/notify/refundSuccess

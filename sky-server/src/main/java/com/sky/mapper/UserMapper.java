@@ -29,4 +29,13 @@ public interface UserMapper {
     * @Date 2024/9/13 20:24
     */
     void insert(User user);
+
+    /**
+    * 根据id查询用户
+    * @param userId 
+    * @return User 
+    * @Date 2024/9/14 14:56
+    */
+    @Select("select * from user where id = #{id}")
+    User getById(Long id);
 }
