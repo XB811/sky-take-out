@@ -56,6 +56,9 @@ public class UserServiceImpl implements UserService {
             //插入用户
             user=User.builder()
                     .openid(openid)
+                    .name(userLoginDTO.getName())
+                    .sex(userLoginDTO.getSex())
+                    .avatar(userLoginDTO.getAvatar())
                     .createTime(LocalDateTime.now())
                     .build();
             userMapper.insert(user);

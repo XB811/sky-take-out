@@ -26,7 +26,7 @@ public class OssConfiguration {
     @Bean
     @ConditionalOnMissingBean //只有一个QiNiuOSSUtil对象
     public QiNiuOSSUtil qiNiuOSSUtil(QiNiuOssProperties qiNiuOssProperties) {
-        log.info("开始创建阿里云文件上床工具类对象:{}", qiNiuOssProperties);
+        //log.info("开始创建阿里云文件上床工具类对象:{}", qiNiuOssProperties);
         QiNiuOSSUtil qiNiuOSSUtil = QiNiuOSSUtil.builder()
                 .accessKeyId(qiNiuOssProperties.getAccessKeyId())
                 .accessKeySecret(qiNiuOssProperties.getAccessKeySecret())
